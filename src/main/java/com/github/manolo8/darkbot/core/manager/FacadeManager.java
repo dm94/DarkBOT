@@ -22,6 +22,7 @@ import com.github.manolo8.darkbot.core.objects.facades.SettingsProxy;
 import com.github.manolo8.darkbot.core.objects.facades.SlotBarsProxy;
 import com.github.manolo8.darkbot.core.objects.facades.SpaceMapWindowProxy;
 import com.github.manolo8.darkbot.core.objects.facades.StatsProxy;
+import com.github.manolo8.darkbot.core.objects.facades.TestProxy;
 import com.github.manolo8.darkbot.core.objects.facades.WorldBossOverviewProxy;
 import com.github.manolo8.darkbot.core.objects.swf.PairArray;
 import eu.darkbot.api.PluginAPI;
@@ -32,9 +33,9 @@ import java.util.List;
 import static com.github.manolo8.darkbot.Main.API;
 
 public class FacadeManager implements Manager, eu.darkbot.api.API.Singleton {
-    private final PairArray commands         = PairArray.ofArray();
-    private final PairArray proxies          = PairArray.ofArray();
-    private final PairArray mediators        = PairArray.ofArray();
+    private final PairArray commands = PairArray.ofArray();
+    private final PairArray proxies = PairArray.ofArray();
+    private final PairArray mediators = PairArray.ofArray();
     private final List<Updatable> updatables = new ArrayList<>();
 
     private final PluginAPI pluginAPI;
@@ -56,29 +57,31 @@ public class FacadeManager implements Manager, eu.darkbot.api.API.Singleton {
     public final GauntletPlutusProxy plutus;
     public final NpcEventProxy npcEventProxy;
     public final WorldBossOverviewProxy worldBossOverview;
+    public final TestProxy testProxy;
     public final Updatable group;
 
     public FacadeManager(PluginAPI pluginApi) {
         this.pluginAPI = pluginApi;
 
-        this.log            = registerMediator("LogWindowMediator",   LogMediator.class);
-        this.chat           = registerProxy("ChatProxy",              ChatProxy.class);
-        this.stats          = registerProxy("StatsProxy",             StatsProxy.class);
-        this.escort         = registerProxy("payload_escort",         EscortProxy.class);
-        this.booster        = registerProxy("BoosterProxy",           BoosterProxy.class);
-        this.settings       = registerProxy("SettingsWindowFUIProxy", SettingsProxy.class);
-        this.slotBars       = registerProxy("ItemsControlMenuProxy",  SlotBarsProxy.class);
-        this.labyrinth      = registerProxy("frozen_labyrinth",       FrozenLabyrinthProxy.class);
-        this.eternalGate    = registerProxy("eternal_gate",           EternalGateProxy.class);
-        this.blacklightGate = registerProxy("eternal_blacklight",     EternalBlacklightProxy.class);
-        this.chrominEvent   = registerProxy("chrominEvent",           ChrominProxy.class);
-        this.astralGate     = registerProxy("rogue_lite",             AstralGateProxy.class);
-        this.highlight      = registerProxy("HighlightProxy",         HighlightProxy.class);
-        this.spaceMapWindowProxy = registerProxy("spacemap",          SpaceMapWindowProxy.class);
-        this.plutus         = registerProxy("plutus",                 GauntletPlutusProxy.class);
-        this.npcEventProxy  = registerProxy("npc_event",              NpcEventProxy.class);
-        this.worldBossOverview = registerProxy("worldBoss_overview",  WorldBossOverviewProxy.class);
-        this.group          = registerProxy("GroupProxy",             Updatable.NoOp.class);
+        this.log = registerMediator("LogWindowMediator", LogMediator.class);
+        this.chat = registerProxy("ChatProxy", ChatProxy.class);
+        this.stats = registerProxy("StatsProxy", StatsProxy.class);
+        this.escort = registerProxy("payload_escort", EscortProxy.class);
+        this.booster = registerProxy("BoosterProxy", BoosterProxy.class);
+        this.settings = registerProxy("SettingsWindowFUIProxy", SettingsProxy.class);
+        this.slotBars = registerProxy("ItemsControlMenuProxy", SlotBarsProxy.class);
+        this.labyrinth = registerProxy("frozen_labyrinth", FrozenLabyrinthProxy.class);
+        this.eternalGate = registerProxy("eternal_gate", EternalGateProxy.class);
+        this.blacklightGate = registerProxy("eternal_blacklight", EternalBlacklightProxy.class);
+        this.chrominEvent = registerProxy("chrominEvent", ChrominProxy.class);
+        this.astralGate = registerProxy("rogue_lite", AstralGateProxy.class);
+        this.highlight = registerProxy("HighlightProxy", HighlightProxy.class);
+        this.spaceMapWindowProxy = registerProxy("spacemap", SpaceMapWindowProxy.class);
+        this.plutus = registerProxy("plutus", GauntletPlutusProxy.class);
+        this.npcEventProxy = registerProxy("npc_event", NpcEventProxy.class);
+        this.worldBossOverview = registerProxy("worldBoss_overview", WorldBossOverviewProxy.class);
+        this.group = registerProxy("GroupProxy", Updatable.NoOp.class);
+        this.testProxy = registerProxy("miniclient_reward", TestProxy.class);
 
         registerProxy("dispatch", DispatchProxy.class);
         registerMediator("dispatch_retriever", DispatchMediator.class);
@@ -119,13 +122,15 @@ public class FacadeManager implements Manager, eu.darkbot.api.API.Singleton {
 
     public void tick() {
         // Currently commands are not used by the bot and they represent
-        // a decently big cpu chunk in ticking. Leaving them out reduces tick time significantly.
-        //commands.update();
+        // a decently big cpu chunk in ticking. Leaving them out reduces tick time
+        // significantly.
+        // commands.update();
         proxies.update();
         mediators.update();
 
         for (Updatable updatable : updatables) {
-            if (updatable.address != 0) updatable.update();
+            if (updatable.address != 0)
+                updatable.update();
         }
     }
 }

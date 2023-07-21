@@ -7,3 +7,7 @@
 dependency-reduced-pom.xml
 *.iml
 *.json
+bin/
+lib/
+plugins/
+logs/

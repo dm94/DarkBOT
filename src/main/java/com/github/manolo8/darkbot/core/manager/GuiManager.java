@@ -63,6 +63,7 @@ public class GuiManager implements Manager, GameScreenAPI {
     public final Gui blacklightGate;
     public final Gui astralGate;
     public final Gui astralSelection;
+    public final Gui bonusCalendar;
     public final RefinementGui refinement;
     public final PetManager pet;
     public final OreTradeGui oreTrade;
@@ -129,6 +130,7 @@ public class GuiManager implements Manager, GameScreenAPI {
         this.refinement = register("refinement", RefinementGui.class);
         this.chat = register("chat", ChatGui.class);
         this.settingsGui = register("settings", SettingsGui.class);
+        this.bonusCalendar = register("miniclient_reward");
 
         register("dispatch", DispatchManager.class);
         register("popup_generic_icon", IconGui.class);
@@ -142,9 +144,10 @@ public class GuiManager implements Manager, GameScreenAPI {
         return register(key, Gui.class);
     }
 
-    @SuppressWarnings({"unchecked", "CastCanBeRemovedNarrowingVariableType"})
+    @SuppressWarnings({ "unchecked", "CastCanBeRemovedNarrowingVariableType" })
     private <T extends Gui> T register(String key, Class<T> gui) {
-        Gui guiFix = pluginAPI.requireInstance(gui); // Workaround for a java compiler assertion bug having issues with types
+        Gui guiFix = pluginAPI.requireInstance(gui); // Workaround for a java compiler assertion bug having issues with
+                                                     // types
         this.guis.addLazy(key, guiFix::update);
         this.registeredGuis.put(key, guiFix);
 
@@ -211,12 +214,15 @@ public class GuiManager implements Manager, GameScreenAPI {
     public boolean tryRevive() {
         if (repairManager.setBeforeReviveTime())
             return false;
-        if (System.currentTimeMillis() - lastRepairAttempt <= 10000) return false;
+        if (System.currentTimeMillis() - lastRepairAttempt <= 10000)
+            return false;
 
         if (repairManager.tryRevive()) {
             lastRepairAttempt = System.currentTimeMillis();
-            if (main.config.MISCELLANEOUS.DRONE_REPAIR_PERCENTAGE != 0) this.main.backpage.checkDronesAfterKill();
-        } else return false;
+            if (main.config.MISCELLANEOUS.DRONE_REPAIR_PERCENTAGE != 0)
+                this.main.backpage.checkDronesAfterKill();
+        } else
+            return false;
 
         return true;
     }
@@ -235,7 +241,7 @@ public class GuiManager implements Manager, GameScreenAPI {
     public boolean canTickModule() {
         // visible var is sometimes false even if lost connection window is visible
         if (lostConnection.address > 0) {
-            //Wait 2.5 seconds to reconnect
+            // Wait 2.5 seconds to reconnect
             if (lostConnection.lastUpdatedOver(2500)) {
                 tryReconnect(lostConnection);
                 checkInvalid();
@@ -267,20 +273,22 @@ public class GuiManager implements Manager, GameScreenAPI {
 
             if (lastDeath == -1) {
                 lastDeath = System.currentTimeMillis();
-                //deaths++;
+                // deaths++;
             }
 
-            if (!tryRevive()) return false;
+            if (!tryRevive())
+                return false;
 
             if (main.config.GENERAL.SAFETY.MAX_DEATHS != -1 &&
-                    repairManager.getDeathAmount() >= main.config.GENERAL.SAFETY.MAX_DEATHS) main.setRunning(false);
-            else checkInvalid();
+                    repairManager.getDeathAmount() >= main.config.GENERAL.SAFETY.MAX_DEATHS)
+                main.setRunning(false);
+            else
+                checkInvalid();
 
             return false;
         } else {
             lastDeath = -1;
         }
-
 
         HeroManager hero = main.hero;
         if (this.needRefresh && System.currentTimeMillis() - lastRepairAttempt > 5_000) {
@@ -296,8 +304,11 @@ public class GuiManager implements Manager, GameScreenAPI {
             return false;
         } else if (hero.locationInfo.isLoaded()
                 && (hero.locationInfo.isMoving() || System.currentTimeMillis() - hero.drive.lastMoved > 20 * 1000)
-                && (hero.health.hpIncreasedIn(30_000) || hero.health.hpDecreasedIn(30_000) || hero.health.hpPercent() == 1 || (hero.hasTarget() && hero.isAttacking(hero.getLocalTarget())))
-                && (hero.health.shIncreasedIn(30_000) || hero.health.shDecreasedIn(30_000) || hero.health.shieldPercent() == 1 || hero.health.shieldPercent() == 0)) {
+                && (hero.health.hpIncreasedIn(30_000) || hero.health.hpDecreasedIn(30_000)
+                        || hero.health.hpPercent() == 1
+                        || (hero.hasTarget() && hero.isAttacking(hero.getLocalTarget())))
+                && (hero.health.shIncreasedIn(30_000) || hero.health.shDecreasedIn(30_000)
+                        || hero.health.shieldPercent() == 1 || hero.health.shieldPercent() == 0)) {
             validTime = System.currentTimeMillis();
         }
 
@@ -377,7 +388,8 @@ public class GuiManager implements Manager, GameScreenAPI {
     @Override
     public void toggleProActionBar(boolean visible) {
         settingsProxy.getCharacterOf(SettingsProxy.KeyBind.TOGGLE_PRO_ACTION)
-                .filter(c -> slotBarsProxy.proActionBar.address != 0 && slotBarsProxy.isProActionBarVisible() != visible)
+                .filter(c -> slotBarsProxy.proActionBar.address != 0
+                        && slotBarsProxy.isProActionBarVisible() != visible)
                 .ifPresent(API::keyboardClick);
     }
 
@@ -392,7 +404,8 @@ public class GuiManager implements Manager, GameScreenAPI {
 
         public void tick() {
             for (int i = 0; i < managedGuis.length; i++) {
-                if (closed[i]) continue;
+                if (closed[i])
+                    continue;
 
                 Gui gui = managedGuis[i];
                 if (gui.lastUpdatedOver(5000) && gui.show(false)) {

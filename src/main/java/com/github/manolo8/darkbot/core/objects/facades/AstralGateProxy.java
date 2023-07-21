@@ -18,4 +18,20 @@ public class AstralGateProxy extends Updatable {
         cpuCount = API.readMemoryInt(API.readMemoryLong(data + 96) + 40);
 
     }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public int getCurrentRift() {
+        return currentRift;
+    }
+
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    public int getCpuCount() {
+        return cpuCount;
+    }
 }
