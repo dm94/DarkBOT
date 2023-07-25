@@ -9,6 +9,7 @@ import com.github.manolo8.darkbot.core.objects.Gui;
 import com.github.manolo8.darkbot.core.objects.IconGui;
 import com.github.manolo8.darkbot.core.objects.IconOkGui;
 import com.github.manolo8.darkbot.core.objects.LogoutGui;
+import com.github.manolo8.darkbot.core.objects.MiniClientRewardGui;
 import com.github.manolo8.darkbot.core.objects.OreTradeGui;
 import com.github.manolo8.darkbot.core.objects.RefinementGui;
 import com.github.manolo8.darkbot.core.objects.SettingsGui;
@@ -64,6 +65,7 @@ public class GuiManager implements Manager, GameScreenAPI {
     public final Gui blacklightGate;
     public final Gui astralGate;
     public final Gui astralSelection;
+    public final MiniClientRewardGui miniClientReward;
     public final RefinementGui refinement;
     public final PetManager pet;
     public final OreTradeGui oreTrade;
@@ -130,6 +132,7 @@ public class GuiManager implements Manager, GameScreenAPI {
         this.refinement = register("refinement", RefinementGui.class);
         this.chat = register("chat", ChatGui.class);
         this.settingsGui = register("settings", SettingsGui.class);
+        this.miniClientReward = register("miniclient_reward", MiniClientRewardGui.class);
 
         register("dispatch", DispatchManager.class);
         register("popup_generic_icon", IconGui.class);
@@ -270,7 +273,7 @@ public class GuiManager implements Manager, GameScreenAPI {
 
             if (lastDeath == -1) {
                 lastDeath = System.currentTimeMillis();
-                //deaths++;
+                // deaths++;
             }
 
             if (!tryRevive()) return false;
