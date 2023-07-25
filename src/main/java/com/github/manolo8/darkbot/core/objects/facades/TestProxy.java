@@ -14,12 +14,14 @@ public class TestProxy extends Updatable implements API.Singleton {
 
     @Override
     public void update() {
-        API.readMemory(address, 330);
-        byte[] data = API.readMemory(address, 330);
+        if (address == 0)
+            return;
 
-        long otherData = API.readMemoryLong(address + 48) & ByteUtils.ATOM_MASK;
+        long data = API.readMemoryLong(address + 48) & ByteUtils.ATOM_MASK;
+        int dayClaimed = API.readMemoryInt(data + 0x40);
 
-        System.out.println(otherData);
+        long claimableAddr = API.readMemoryLong(data + 0x50) & ByteUtils.ATOM_MASK;
+        boolean claimable = API.readBoolean(claimableAddr + 0x20);
     }
 
 }
