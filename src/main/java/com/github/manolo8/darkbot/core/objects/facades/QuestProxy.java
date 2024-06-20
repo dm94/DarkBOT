@@ -43,9 +43,11 @@ public class QuestProxy extends Updatable implements QuestAPI {
 
         long questInfoGiverSelectedAddr = readAtom(0xA8);
         this.questGiverSelectedInfo.update(questInfoGiverSelectedAddr);
+        this.questGiverSelectedInfo.update();
 
         long questGiverSelectedAddr = readAtom(0xB0);
         this.questGiverSelected.update(questGiverSelectedAddr);
+        this.questGiverSelected.update();
     }
 
     @Override
@@ -74,7 +76,7 @@ public class QuestProxy extends Updatable implements QuestAPI {
 
     @Getter
     @ToString
-    public static class QuestListItem extends Auto implements QuestAPI.QuestListItem {
+    public static class QuestListItem extends Updatable implements QuestAPI.QuestListItem {
         private int id;
         private int levelRequired;
         private boolean selected;
@@ -107,7 +109,7 @@ public class QuestProxy extends Updatable implements QuestAPI {
     }
 
     @Getter
-    public static class Quest extends Auto implements QuestAPI.Quest {
+    public static class Quest extends Updatable implements QuestAPI.Quest {
         private int id;
         private boolean active;
         private boolean completed;
@@ -146,7 +148,7 @@ public class QuestProxy extends Updatable implements QuestAPI {
 
     @Getter
     @ToString
-    public static class Reward extends Auto implements QuestAPI.Reward {
+    public static class Reward extends Updatable implements QuestAPI.Reward {
         private int amount;
         private String type;
 
@@ -168,7 +170,7 @@ public class QuestProxy extends Updatable implements QuestAPI {
 
     @Getter
     @ToString
-    public static class Requirement extends Auto implements QuestAPI.Requirement {
+    public static class Requirement extends Updatable implements QuestAPI.Requirement {
         private String description;
         private double progress;
         private double goal;
