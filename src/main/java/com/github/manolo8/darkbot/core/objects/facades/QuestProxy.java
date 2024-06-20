@@ -37,6 +37,7 @@ public class QuestProxy extends Updatable implements QuestAPI {
 
         this.selectedTab = readInt(0x50);
         this.currentQuest.update(readAtom(0x98, 0x28));
+        this.currentQuest.update();
 
         this.questGiverOpen = readBoolean(0x40);
         if (!questGiverOpen) return;
